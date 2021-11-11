@@ -2,11 +2,13 @@ package database
 
 import (
 	"fmt"
-	"gorm.io/driver/mysql"
+	"gopkg.in/ini.v1"
 	"gorm.io/gorm"
+	"music_api_server/Tool"
 )
 
 var MusicApiDB *gorm.DB
+var dbConfig *database
 
 const (
 	DbHost string = "127.0.0.1"
@@ -16,20 +18,40 @@ const (
 	DbTable    string = "musicDB"
 )
 
-func init(){
-	config := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", DbUser, DbPassword, DbHost, DbPort, DbTable)
-	db , err := gorm.Open(mysql.Open(config),&gorm.Config{
+type database struct{
+	Host string
+	Port int
+	User string
+	Password string
+	DbName string
+	source *ini.File
+}
 
-	})
-	MusicApiDB = db //global variable
+func (db *database)Load(path string)  *database{
+	exists, err := Tool.PathExists(path)
+	if !exists {
+		fmt.Println("ini file is not exist")
+		return db
+	}
 
+	db.source, err = ini.Load(path)
 	if err != nil{
-		fmt.Printf("mysql connection error : %v",err)
-		return
+		panic(err)
+	}
+	return db
+}
+
+func (db *database)Init()  *database{
+	if db.source == nil{
+		return db
 	}
 
-	if MusicApiDB.Error != nil{
-		fmt.Printf("database connection error %v",MusicApiDB.Error)
-		return
-	}
+	db.Host = db.source.Section("database").Key("address").MustString("127.0.0.1")
+	db.Port = db.source.Section("database").Key("port").MustInt(3306)
+	db.User = db.source.Section("database").Key("user").MustString("root")
+	db.Password = db.source.Section("database").Key("password").MustString("")
+	db.DbName = db.source.Section("database").Key("database").MustString("music")
+
+	return db
+
 }

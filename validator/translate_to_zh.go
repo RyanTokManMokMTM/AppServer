@@ -1,7 +1,6 @@
 package validator
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/zh_Hant_TW"
 	ut "github.com/go-playground/universal-translator"
@@ -13,27 +12,6 @@ var (
 	universal *ut.UniversalTranslator
 	trans  ut.Translator
 )
-
-type TestService interface {
-	Greeting() string
-}
-
-type TestStr struct {
-	Name string `form:"username" binding:"required"`
-}
-
-type TestUser struct {
-	Name string `form:"username" binding:"required"`
-}
-
-
-func (test* TestStr) Greeting(){
-
-}
-
-func (u *TestUser) Greeting() string{
-	return fmt.Sprintf("hello,%v,welcome!!!",u.Name)
-}
 
 func init(){
 	tw := zh_Hant_TW.New() //new zh_tw translation
