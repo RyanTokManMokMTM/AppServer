@@ -3,11 +3,9 @@ package database
 import (
 	"fmt"
 	"gopkg.in/ini.v1"
-	"gorm.io/gorm"
 	"music_api_server/Tool"
 )
 
-var MusicApiDB *gorm.DB
 var dbConfig *database
 
 const (

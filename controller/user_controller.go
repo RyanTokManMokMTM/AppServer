@@ -17,14 +17,13 @@ import (
 var route *log.Logger
 func init(){
 	route = log.New(os.Stdout,"Route debug[DEBUG]",log.LstdFlags)
-	orm.MusicApiDB.AutoMigrate(&model.UserInfo{})
 }
 
 func UserLogin(ctx *gin.Context){
 	//TODO -Info checking
 	//TODO -User
-	if orm.MusicApiDB == nil{
-		ctx.String(http.StatusInternalServerError,"server initialize error")
+	if orm.DB == nil{
+		ctx.String(http.StatusInternalServerError,"server initialize apiError")
 		ctx.Abort()
 		return
 	}
@@ -40,7 +39,7 @@ func UserLogin(ctx *gin.Context){
 		return
 	}else{
 		var dbResult model.UserInfo
-		if err := orm.MusicApiDB.Where("username = ?","jackson").First(&dbResult);err != nil{
+		if err := orm.DB.Where("username = ?","jackson").First(&dbResult);err != nil{
 			if errors.Is(err.Error,gorm.ErrRecordNotFound){
 				ctx.JSON(http.StatusOK,gin.H{
 					"status":-1,
