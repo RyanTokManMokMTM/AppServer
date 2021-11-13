@@ -6,7 +6,7 @@ type (
 		Password string `form:"password" binding:"required"`
 		ConfirmPassword string `form:"confirmPassword" binding:"required"`
 		FirstName string `form:"firstName" binding:"required"`
-		LastName string `form:"LastName" binding:"required"`
+		LastName string `form:"lastName" binding:"required"`
 	}
 
 	LoginRequest struct {

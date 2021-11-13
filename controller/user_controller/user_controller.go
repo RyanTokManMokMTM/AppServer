@@ -11,8 +11,18 @@ import (
 	"strings"
 )
 
-
-//RegisterHandler TODO - USING CUSTOM ERROR HANDLER
+// @Summary UserSignUp
+// @Tags User Auth
+// @Version 1.0
+// @accept  application/x-www-form-urlencoded;charset=utf-8
+// @produce application/json
+// @param email formData  string true "email"
+// @param password formData  string true "password"
+// @param confirmPassword formData  string true "confirmPassword"
+// @param firstName formData  string true "FirstName"
+// @param lastName formData  string true "LastName"
+// @Success 200 string string SignUpSucceed
+// @Router  /user/auth/signup [post]
 func RegisterHandler(ctx *gin.Context) (interface{},error){
 	req := apiReq.RegisterRequest{}
 	//TODO -Binding the request
@@ -61,10 +71,18 @@ func RegisterHandler(ctx *gin.Context) (interface{},error){
 	return "Register succeed!", nil
 }
 
-//LoginHandler TODO - USING CUSTOM ERROR HANDLER
+
+// @Summary UserLogin
+// @Tags User Auth
+// @Version 1.0
+// @accept  application/x-www-form-urlencoded;charset=utf-8
+// @produce application/json
+// @param email formData  string true "email"
+// @param password formData  string true "password"
+// @Success 200 string string LoginSucceed
+// @Router /user/auth/login [post]
 func LoginHandler(ctx *gin.Context) (interface{},error){
 	req := apiReq.LoginRequest{}
-
 	err := ctx.ShouldBind(&req)
 	if err != nil {
 		return nil ,apiError.APIError{
@@ -72,6 +90,7 @@ func LoginHandler(ctx *gin.Context) (interface{},error){
 			Message: err.Error(),
 		}
 	}
+	fmt.Println(req)
 	service := service.UserService{}
 	jwt, err := service.Login(&req)
 	if err != nil {
