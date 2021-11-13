@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"music_api_server/model"
+	"music_api_server/model/user_model"
 )
 
 var (
@@ -45,7 +45,7 @@ func init(){
 }
 
 func migration(){
-	DB.AutoMigrate(&model.UserInfo{})
+	DB.AutoMigrate(&user_model.UserInfo{})
 }
 
 func Close(){

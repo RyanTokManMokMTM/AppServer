@@ -2,23 +2,21 @@ package main
 
 import (
 	"fmt"
-	"log"
-
-	"music_api_server/config"
 	"github.com/gin-gonic/gin"
+	"log"
+	"music_api_server/config"
 	"music_api_server/route"
 )
 
-
-func main(){
-	server := gin.Default()
+//ErrorHandler Return a gin.Handle function with error handle
+func main() {
+	//
+	server := gin.New()
 	//TODO -Serving Static files
 	resource := server.Group("/resource")
-	resource.Static("/","./public")
+	resource.Static("/", "./public")
 
 	route.RouterInit(server) //init all available route
 
-	log.Fatalln(server.Run(fmt.Sprintf("%s:%d",config.Server.Address,config.Server.Port)))
+	log.Fatalln(server.Run(fmt.Sprintf("%s:%d", config.Server.Address, config.Server.Port)))
 }
-
-

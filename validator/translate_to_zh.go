@@ -11,6 +11,7 @@ import (
 var (
 	universal *ut.UniversalTranslator
 	trans  ut.Translator
+	Validate *validator.Validate
 )
 
 func init(){
@@ -20,10 +21,9 @@ func init(){
 	trans , _ = universal.GetTranslator("zh_tw")
 
 	//setting gin binding validator
-	validate := binding.Validator.Engine().(*validator.Validate)
-
+	Validate = binding.Validator.Engine().(*validator.Validate)
 	//register translator to gin validator
-	zhTw.RegisterDefaultTranslations(validate,trans)
+	zhTw.RegisterDefaultTranslations(Validate,trans)
 }
 
 func Translate(err error) map[string][]string{

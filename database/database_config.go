@@ -46,7 +46,7 @@ func (db *database)Init()  *database{
 
 	db.Host = db.source.Section("database").Key("address").MustString("127.0.0.1")
 	db.Port = db.source.Section("database").Key("port").MustInt(3306)
-	db.User = db.source.Section("database").Key("user").MustString("root")
+	db.User = db.source.Section("database").Key("user_service").MustString("root")
 	db.Password = db.source.Section("database").Key("password").MustString("")
 	db.DbName = db.source.Section("database").Key("database").MustString("music")
 

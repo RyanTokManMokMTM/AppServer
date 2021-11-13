@@ -2,12 +2,11 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
-	ctr "music_api_server/controller"
+	"music_api_server/apiError"
+	"music_api_server/controller/user_controller"
 )
 
 func UseRoute(r *gin.RouterGroup){
 	userRoute := r.Group("/user/auth")
-	userRoute.POST("/login",ctr.UserLogin)
-	userRoute.POST("/signup",ctr.UserSignUp)
-	userRoute.POST("/logout",ctr.UserSignOut)
+	userRoute.POST("/signup", apiError.ErrorHandler(user_controller.RegisterHandler))
 }
