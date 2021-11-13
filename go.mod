@@ -8,6 +8,7 @@ require (
 	github.com/go-playground/locales v0.13.0
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator/v10 v10.4.1
+	github.com/sirupsen/logrus v1.8.1
 	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa
 	gopkg.in/ini.v1 v1.63.2
 	gorm.io/driver/mysql v1.1.3

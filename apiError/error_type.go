@@ -1,7 +1,6 @@
 package apiError
 
 type APIError struct {
-	Status int
 	Code int
 	Message string
 }

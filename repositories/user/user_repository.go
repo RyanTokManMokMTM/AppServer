@@ -26,8 +26,10 @@ func CreateUser(data *req.RegisterRequest) error{
 	return err
 }
 
-func GetUserByEmail(email string) error{
-	return nil
+func GetUserByEmail(email string) *user_model.UserInfo{
+	info := user_model.UserInfo{}
+	orm.DB.Where("email = ?",strings.ToLower(email)).First(&info)
+	return &info
 }
 
 func DeleteUserByEmail() error{

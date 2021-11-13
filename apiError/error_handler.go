@@ -15,8 +15,10 @@ func ErrorHandler(handler ErrorAPIHandle) gin.HandlerFunc{
 			ctx.JSON(apiError.Code,apiError)
 			return
 		}
+
 		ctx.JSON(http.StatusOK,gin.H{
-			"data":data,
+			"code":http.StatusOK,
+			"result":data,
 		})
 	}
 }

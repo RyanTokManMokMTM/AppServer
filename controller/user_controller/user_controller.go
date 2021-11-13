@@ -1,26 +1,41 @@
 package user_controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"music_api_server/apiError"
 	apiReq "music_api_server/request"
 	service "music_api_server/service/user_service"
 	"music_api_server/validator"
 	"net/http"
+	"strings"
 )
 
 
 //RegisterHandler TODO - USING CUSTOM ERROR HANDLER
 func RegisterHandler(ctx *gin.Context) (interface{},error){
 	req := apiReq.RegisterRequest{}
-
 	//TODO -Binding the request
 	err := ctx.ShouldBind(&req)
 	if err != nil{
 		return nil,apiError.APIError{
-			Status: -1,
 			Code: http.StatusBadRequest,
 			Message: err.Error(),
+		}
+	}
+	if match := strings.Compare(req.Password,req.ConfirmPassword);match != 0{
+		return nil ,apiError.APIError{
+			Code:http.StatusOK,
+			Message: "password not match",
+		}
+	}
+
+	err = validator.Validate.Var(req.Password,"alphanum")
+	if err != nil{
+		fmt.Println(err)
+		return nil,apiError.APIError{
+			Code: http.StatusOK,
+			Message: "Password must only contain alphabet and number",
 		}
 	}
 
@@ -28,7 +43,6 @@ func RegisterHandler(ctx *gin.Context) (interface{},error){
 	err = validator.Validate.Var(req.Email,"email")
 	if err != nil {
 			return nil,apiError.APIError{
-					Status: http.StatusBadRequest,
 					Code: http.StatusBadRequest,
 					Message: "Please provide a email",
 			}
@@ -39,57 +53,33 @@ func RegisterHandler(ctx *gin.Context) (interface{},error){
 	err = userService.Register(&req)
 	if err != nil {
 		return nil,apiError.APIError{
-			Status: http.StatusBadRequest,
 			Code: http.StatusBadRequest,
 			Message: err.Error(),
 		}
 	}
 
-	return apiError.APIError{
-		Status: 200,
-		Message: "Register succeed!",
-		Code: 200,
-	}, nil
+	return "Register succeed!", nil
 }
 
 //LoginHandler TODO - USING CUSTOM ERROR HANDLER
 func LoginHandler(ctx *gin.Context) (interface{},error){
-	return nil, nil
-}
+	req := apiReq.LoginRequest{}
 
-//
-//
-//func tokenGenerator(ctx *gin.Context,info *user_service.UserInfo){
-//	token := mid.NewJsonWebToken()
-//	claims := mid.CustomClaims{
-//		Name:  info.Name,
-//		Email: info.Email,
-//		StandardClaims: jwt.StandardClaims{
-//			Issuer:"jackson.tmm",
-//			ExpiresAt: int64(time.Now().Unix() + 3600),
-//			NotBefore: int64(time.Now().Unix() - 1000),
-//			Subject: "User Authorization",
-//		},
-//	}
-//
-//	jsonToken, err := token.CreateToken(claims)
-//	if err != nil {
-//		ctx.JSON(http.StatusOK,gin.H{
-//			"status":-1,
-//			"msg":err.Error(),
-//			"data":nil,
-//		})
-//	}
-//
-//	log.Printf("User Token is %v",jsonToken)
-//
-//	ctx.JSON(http.StatusOK,gin.H{
-//		"status":0,
-//		"msg":"Logged in...",
-//		"data": map[string]interface{}{
-//			"user_service name":info.Name,
-//			"token":jsonToken,
-//		},
-//	})
-//	return
-//}
+	err := ctx.ShouldBind(&req)
+	if err != nil {
+		return nil ,apiError.APIError{
+			Code: http.StatusBadRequest,
+			Message: err.Error(),
+		}
+	}
+	service := service.UserService{}
+	jwt, err := service.Login(&req)
+	if err != nil {
+		return nil, apiError.APIError{
+			Code: http.StatusOK,
+			Message: err.Error(),
+		}
+	}
+	authToken := fmt.Sprintf("Bearer %s",jwt)
+	return authToken, nil
+}
