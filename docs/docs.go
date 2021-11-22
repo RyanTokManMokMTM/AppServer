@@ -122,7 +122,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "APIRESPONSE"
                         }
                     }
                 }

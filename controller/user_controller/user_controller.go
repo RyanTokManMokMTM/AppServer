@@ -59,6 +59,20 @@ func RegisterHandler(ctx *gin.Context) (interface{},error){
 
 	}
 	//TODO - USer Service Register
+
+	for _,userImage := range  req.Icons{
+		//fileContentType := userImage.Header.Get("Content-Type")
+		//imageType := (strings.Split(fileContentType,"/"))[1]
+		err = ctx.SaveUploadedFile(userImage, fmt.Sprintf("public/images/%s", userImage.Filename))
+	}
+	if err != nil {
+		return nil,apiError.APIError{
+			Code: http.StatusBadRequest,
+			Message: err.Error(),
+		}
+	}
+
+	//TODO - USer Service Register
 	userService := service.UserService{}
 	err = userService.Register(&req)
 	if err != nil {
@@ -90,7 +104,7 @@ func LoginHandler(ctx *gin.Context) (interface{},error){
 			Message: err.Error(),
 		}
 	}
-	fmt.Println(req)
+
 	service := service.UserService{}
 	jwt, err := service.Login(&req)
 	if err != nil {

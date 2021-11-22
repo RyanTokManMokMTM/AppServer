@@ -15,6 +15,7 @@ func CreateUser(data *req.RegisterRequest) error{
 	info.LastName = data.LastName
 	info.Email = strings.ToLower(data.Email)
 	info.Password = data.Password
+	info.Icon = data.Icons[0].Filename
 	var existEmail int
 	orm.DB.Raw("SELECT COUNT(1) as exist FROM user_infos where email = ?",info.Email).Scan(&existEmail)
 	if existEmail == 1{

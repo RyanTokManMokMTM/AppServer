@@ -13,5 +13,6 @@ type (
 		Password string `gorm:"passoword;size:64;NOT NULL"`
 		FirstName string `gorm:"name;size:16;default:user_service;NOT NULL" `
 		LastName string  `gorm:"name;size:16;default:user_service;NOT NULL" `
+		Icon string `gorm:"image;size:32;NOT NULL"`
 	}
 )

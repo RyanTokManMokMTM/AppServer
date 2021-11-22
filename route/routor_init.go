@@ -8,7 +8,7 @@ import (
 func RouterInit(r *gin.Engine){
 	//Init for all available route
 	apiV1 := r.Group("/api/v1")
-	UseRoute(apiV1) //User route
+	UserRoute(apiV1) //User route
 	//r.Use(middleware.JWTAuth()).GET("/test/jwt" ,func(context *gin.Context) {
 	//	//name := context.Request.Header.Get("name")
 	//	userName := context.MustGet("userName")
@@ -17,16 +17,3 @@ func RouterInit(r *gin.Engine){
 	//})
 
 }
-
-//func logger() gin.HandlerFunc{
-//	return func(ctx* gin.Context){
-//		t := time.Time{}
-//		ctx.Set("test_field","jackson testing")
-//
-//		ctx.Next()
-//
-//		latency := time.Since(t)
-//		fmt.Println(latency)
-//		log.Println(ctx.Writer.Status())
-//	}
-//}

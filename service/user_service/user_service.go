@@ -16,7 +16,6 @@ type UserService struct {
 
 func (user *UserService)Register(req *req.RegisterRequest) error {
 	bcrypt := tool.BcryptDefault
-
 	hashPassword , err := bcrypt.MakePassword([]byte(req.Password))
 	if err != nil{
 		return err
